@@ -20,6 +20,20 @@ app.post("/register", async (req, res) => {
   let user = await userModel.findOne({ email });
   if (user) return res.send(500).send("User already registered");
 
+    bcrypt.genSalt(10, (err, salt) => {
+      bcrypt.hash(password, salt, async (err, hash) => {
+        let user = await userModel.create({
+          name,
+          username,
+          email,
+          password: hash,
+        });
+
+        let token = jwt.sign({ email: email, userid: user._id }, "postly");
+        res.cookie("token", token);
+        res.send("User Registered");
+      });
+    });
 });
 
 app.listen(3000, () => {
