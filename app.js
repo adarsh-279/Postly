@@ -58,6 +58,19 @@ app.get("/logout", async (req, res) => {
   res.redirect("/login");
 });
 
+app.get("/profile", isLogggedIn, async (req, res) => {
+  res.send("Profile Page");
+});
+
+function isLogggedIn(req, res, next) {
+  if (req.cookies.token === "") res.send("You must be logged in first");
+  else {
+    let data = jwt.verify(req.cookies.token, "postly");
+    req.user = data;
+    next();
+  }
+}
+
 app.listen(3000, () => {
   console.log("Server Started");
 });
