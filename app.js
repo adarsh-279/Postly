@@ -48,7 +48,7 @@ app.post("/login", async (req, res) => {
     if (result) {
       let token = jwt.sign({ email: email, userid: user._id }, "postly");
       res.cookie("token", token);
-      res.status(200).send("You can login");
+      res.status(200).redirect("/profile");
     } else res.redirect("/login");
   });
 });
@@ -59,11 +59,26 @@ app.get("/logout", async (req, res) => {
 });
 
 app.get("/profile", isLogggedIn, async (req, res) => {
-  res.send("Profile Page");
+  let user = await userModel.findOne({ email: req.user.email }).populate("posts")
+  res.render("profile", { user });
+});
+
+app.post("/post", isLogggedIn, async (req, res) => {
+  let user = await userModel.findOne({ email: req.user.email });
+  let { content } = req.body;
+
+  let post = await postModel.create({
+    user: user._id,
+    content,
+  });
+
+  user.posts.push(post._id);
+  await user.save();
+  res.redirect("/profile")
 });
 
 function isLogggedIn(req, res, next) {
-  if (req.cookies.token === "") res.send("You must be logged in first");
+  if (req.cookies.token === "") res.redirect("/login");
   else {
     let data = jwt.verify(req.cookies.token, "postly");
     req.user = data;

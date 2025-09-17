@@ -32,18 +32,20 @@
       <div class="posts mt-20">
         <h1 class="text-zinc-400 text-2xl mb-5">Your Posts!</h1>
         <div class="post-container flex flex-wrap gap-6">
-          <div
+          <% user.posts.reverse().forEach((post)=>{ %>
+            <div
             class="post w-86 p-4 border-2 border-zinc-800 bg-yellow-900/12 text-white rounded-md"
           >
-            <h1 class="opacity-60 text-blue-500">date</h1>
+            <h1 class="opacity-30 text-xs tracking-tight"><%= post.date %></h1>
             <p class="tracking-tight">
-              Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptas
-              id harum, facere esse modi impedit amet molestiae quaerat pariatur
-              incidunt.
+              <%= post.content %>
             </p>
+            <div class="flex text-xs justify-between">
+                <h1 class="text-white opacity-40">Edit</h1>
+                <h1 class="text-red-500">Delete</h1>
+            </div>
           </div>
-
-          
+          <%  }) %>
         </div>
       </div>
     </div>
