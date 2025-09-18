@@ -33,19 +33,21 @@
         <h1 class="text-zinc-400 text-2xl mb-5">Your Posts!</h1>
         <div class="post-container flex flex-wrap gap-6">
           <% user.posts.reverse().forEach((post)=>{ %>
-            <div
+          <div
             class="post w-86 p-4 border-2 border-zinc-800 bg-yellow-900/12 text-white rounded-md"
           >
             <h1 class="opacity-30 text-xs tracking-tight"><%= post.date %></h1>
-            <p class="tracking-tight">
-              <%= post.content %>
-            </p>
-            <div class="flex text-xs justify-between">
-                <h1 class="text-white opacity-40">Edit</h1>
-                <h1 class="text-red-500">Delete</h1>
+            <p class="tracking-tight"><%= post.content %></p>
+            <h1 class="mt-5 text-xs"><%= post.likes.length %> Likes</h1>
+            <div class="flex text-xs justify-between mt-1">
+              <a class="text-blue-500" href="/like/<%= post._id %>">
+                <%= post.likes.indexOf(user._id) === -1 ? "Like" : "Unlike"%>
+              </a>
+              <a class="text-white opacity-40" href="">Edit</a>
+              <a class="text-red-500" href="">Delete</a>
             </div>
           </div>
-          <%  }) %>
+          <% }) %>
         </div>
       </div>
     </div>
