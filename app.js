@@ -92,6 +92,19 @@ app.get("/like/:id", isLogggedIn, async (req, res) => {
   res.redirect("/profile");
 });
 
+app.get("/edit/:id", isLogggedIn, async (req, res) => {
+  let post = await postModel.findOne({ _id: req.params.id }).populate("user");
+
+  res.render("edit", {post})
+});
+
+app.post("/update/:id", isLogggedIn, async (req, res) => {
+let post = await postModel
+  .findOneAndUpdate({ _id: req.params.id }, {content: req.body.content})
+
+  res.redirect("/profile");
+});
+
 function isLogggedIn(req, res, next) {
   if (req.cookies.token === "") res.redirect("/login");
   else {
