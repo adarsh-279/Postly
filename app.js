@@ -31,6 +31,7 @@ app.post("/register", async (req, res) => {
 
       let token = jwt.sign({ email: email, userid: user._id }, "postly");
       res.cookie("token", token);
+        res.redirect("/login");
     });
   });
 });
@@ -101,6 +102,12 @@ app.get("/edit/:id", isLogggedIn, async (req, res) => {
 app.post("/update/:id", isLogggedIn, async (req, res) => {
 let post = await postModel
   .findOneAndUpdate({ _id: req.params.id }, {content: req.body.content})
+
+  res.redirect("/profile");
+});
+
+app.get("/delete/:id", isLogggedIn, async (req, res) => {
+  let post = await postModel.findOneAndDelete({ _id: req.params.id });
 
   res.redirect("/profile");
 });
